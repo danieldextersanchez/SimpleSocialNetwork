@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ViewsController extends Controller
+class HomeController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -26,8 +26,6 @@ class ViewsController extends Controller
         return view('home');
     }
 
-    public function spinkit(){
-        return view('layouts.spinkit');
-    }
+    
 
 }

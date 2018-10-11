@@ -15,7 +15,7 @@
 //     return view('welcome');
 // });
 
-Route::get('/',function(){
+Route::middleware("auth")->get('/',function(){
     return view('welcome');
 });
 
@@ -23,10 +23,13 @@ Auth::routes();
 
 Route::put('/posts','Posts@store');
 
-Route::get('/home', 'ViewsController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
-Route::get('/views/spinkit', 'ViewsController@spinkit');
+Route::get('/views/spinkit', function(){
+    return view('layouts.spinkit');
+});
 
-Route::get('/home', 'ViewsController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
+

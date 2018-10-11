@@ -1,4 +1,4 @@
-<div class="spinner">
+<div class="spinner" >
         <div class="rect1"></div>
         <div class="rect2"></div>
         <div class="rect3"></div>
@@ -7,9 +7,8 @@
       </div>
 <style>
 .spinner {
-  margin: 100px auto;
-  width: 50px;
-  height: 40px;
+  width: auto;
+  height: auto;
   text-align: center;
   font-size: 10px;
 }
