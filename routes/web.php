@@ -15,9 +15,7 @@
 //     return view('welcome');
 // });
 
-Route::middleware("auth")->get('/',function(){
-    return view('welcome');
-});
+Route::middleware("auth")->get('/','Posts@index');
 
 Auth::routes();
 
@@ -30,6 +28,11 @@ Auth::routes();
 Route::get('/views/spinkit', function(){
     return view('layouts.spinkit');
 });
+
+
+Route::get('/profile',function(){
+    return view('profile');
+})->name('profile');
 
 Route::get('/home', 'HomeController@index')->name('home');
 

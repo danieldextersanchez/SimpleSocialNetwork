@@ -13,7 +13,6 @@ class Posts extends Controller
             'user_id' => 'required|max:255',
             'post' => 'string|required|max:140',
         ]);
-        date_default_timezone_set('Asia/Manila');
 
 
 
@@ -25,6 +24,12 @@ class Posts extends Controller
         return response()->json([
             'message' => 'Successfully posted'
         ], 200);
+    }
+
+    public function index(){
+        $users = DB::table('users')->join('posts', 'posts.user_id', '=', 'users.id')
+        ->select('users.*','posts.*')->orderBy('posts.created_at', 'desc')->get();
+        return view('welcome')->with('posts',$users);
     }
 
 }
