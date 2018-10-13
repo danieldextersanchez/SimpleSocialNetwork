@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTablePosts extends Migration
+class CreateTableShare extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateTablePosts extends Migration
      */
     public function up()
     {
-        Schema::create('posts',function(Blueprint $table){
+        Schema::create('share',function(Blueprint $table){
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->string('status');
-            $table->timestamps('created_at');
+            $table->unsignedInteger('post_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('post_id')->references('id')->on('posts');
         });
     }
 
@@ -29,6 +29,6 @@ class CreateTablePosts extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('share');
     }
 }

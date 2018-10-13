@@ -34,3 +34,5 @@ Route::get('/profile','UsersController@index')->name('profile');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::post('/load/posts','Posts@posts');
+

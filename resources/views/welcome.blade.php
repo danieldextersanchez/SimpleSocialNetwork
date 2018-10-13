@@ -1,5 +1,9 @@
-@extends('layouts.app')
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src='{{asset('js/http.js')}}'></script>
+
+
+@extends('layouts.app')
 @section('content')
 <div class="container content" >
 <h4 class='inline'>What's happening?</h4>
@@ -11,35 +15,13 @@
 <button class='btn btn-default floatright' id='update' style='height:50px;width:100px'>Update</button> 
 </div>
 <h4 style='margin-top:50px'><b>Home</b></h4>
-@if(sizeof($posts) > 0)
-<div id='home'>
-  @for($i=0;$i<sizeof($posts);$i++)
-    <?php 
-    $name = $posts[$i]->firstname." ". $posts[$i]->lastname  ;  
-    $post = $posts[$i]->status ;
-    $id = $posts[$i]->id;
-    $username = $posts[$i]->username; 
-    $date =Carbon\Carbon::parse($posts[$i]->created_at)->diffForHumans();
-    ?>
-    <div class='well postedpost pointer' style='background-color:#FFFFFF' >
-        <div class='floatright postactions' style='display:none'>
-        <i value='$id' class='material-icons share' >
-        reply
-        </i>
-       </div>
-       
-       <div class='postcontent' style='min-height:50px' >
-       <img height="50px" style='float:left;border-radius:50%;margin-right:10px' src="storage/profile_pictures/{{$posts[$i]->image_url}}">
-       <b>{{$name}}</b> @ {{$username}}  {{$date}}<br>
-       {{$post}}
-       </div>
-    </div>
-  @endfor
+
+<div id='home'> 
 </div>
-@else
-<div class='center' style='margin-top:100px'><h3>There are no posts</h3></div>
-@endif
-@yield('posts')
+
+
+
+
 </div>
 @stop
 
@@ -63,20 +45,28 @@
     </div>
   </div>
 
+
+
+
+
+
+
+  
 <!--SCRIPTS-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/alertify.js/0.3.1/themes/alertify.core.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/alertify.js/0.3.1/themes/alertify.default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/alertify.js/0.3.1/alertify.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+      $("#spinkit").load("views/spinkit?_token='{{csrf_token()}}' ");
+      http.loadpost("{{csrf_token()}}");
+    })
+</script>
 
 
 @if(Auth::user() != null )
-<script src="{{asset('js/http.js')}}"></script>
 <script>  
         $(document).on("click","#update",function(){
             $("#update").html($("#spinkit").html());
-            post("{{ csrf_token() }}","{{Auth::user()->id}}",$("#postinput").val())
-        })    
+            http.post("{{ csrf_token() }}","{{Auth::user()->id}}",$("#postinput").val());
+        })        
 </script>
 @else
 <script>
@@ -87,5 +77,45 @@ $(document).on("click","#update",function(){
 @endif  
 
 
-<script src='{{asset('js/scripts.js')}}'>
-</script>
+
+<script>
+    $(document).ready(function(){
+        $(document).on("mouseenter",".postedpost",function(e){
+            $(this).css("background-color","#F0F0F2");
+            $(this).children('.postactions').show();
+        })
+        $(document).on("mouseleave",".postedpost",function(){
+            $(this).css("background-color","#FFFFFF");
+            $(this).children('.postactions').hide();
+        })
+        
+        $(document).on("click",".share",function(){
+            var id = $(this).attr("value");
+            var content = $(this).parents('div.postedpost').children('.postcontent').html(); 
+            $("#sharebody").html(content);  
+            $("#myModal").modal();
+        })
+        
+        $(document).on("click",".deletepost",function(){
+            var id = $(this).attr("value");
+            alertify.confirm('Delete?',function(){
+                http.deletepost(id);
+            },function(){
+                alertify.error("not deleted");
+            });
+        })
+        
+        $(document).on("keyup","#postinput",function(e){
+                    var limit = 140;
+                    var length = $(this).val().length;
+                    var result = limit - length;
+                    $("#charnum").text(result);
+                    if (result <= 0 && e.which !== 0 && e.charCode !== 0) {
+                        $('textarea').val((tval).substring(0, tlength - 1));
+                        return false;
+                    }
+        })
+      })
+    
+      </script>
+

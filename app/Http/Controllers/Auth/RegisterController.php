@@ -63,14 +63,24 @@ class RegisterController extends Controller
      * @return \App\User
      */
     protected function create(array $data)
-    {
+    {    
         return User::create([
-            'firstname' => $data['firstname'],
-            'lastname' => $data['lastname'],
+            'firstname' => $this->format($data['firstname']),
+            'lastname' => $this->format($data['lastname']),
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'image_url' => 'default.png'
         ]);
+
+        
+    }
+    public function format($word){
+        $array = explode(" ", $word);
+        $newword = "";
+        for($i=0;$i<sizeof($array);$i++){
+            $newword .= ucfirst(strtolower($array[$i]))." ";
+        }
+        return $newword;
     }
 }

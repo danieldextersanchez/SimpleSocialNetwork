@@ -1,21 +1,42 @@
-function post(token,user_id,post){
-    $.ajax({
-        url : "posts",
-        type : 'PUT',
-        data: {
-            "_token": token,
-            "user_id": user_id,
-            "post": post
-        },
-        success:function(result){
-            $("#update").html("Update");
-            alertify.success(result.message);
-        },
-        error:function(xhr, status, error){
-            $("#update").html("Update");
-            alertify.error(errormessage(xhr.responseText));
-        }
-    })
+
+var http  = {
+    post : function(token,user_id,post){
+        $.ajax({
+            url : "posts",
+            type : 'PUT',
+            data: {
+                "_token": token,
+                "user_id": user_id,
+                "post": post
+            },
+            success:function(result){
+                $("#update").html("Update");
+                http.loadpost(token);
+                alertify.success(result.message);
+            },
+            error:function(xhr, status, error){
+                $("#update").html("Update");
+                http.loadpost(token);
+                alertify.error(errormessage(xhr.responseText));
+            }
+        })
+    },  
+     loadpost : function(token){
+        $.ajax({
+          url:"load/posts",
+          type:"POST",
+          data: {
+            "_token" : token
+          },success:function(data){
+            $("#home").html(data);
+          },error : function(xhr){
+            console.log(xhr); 
+          }
+        })
+      },
+      deletepost : function(){
+        alertify.success('deleted');
+      }
 }
 
 
