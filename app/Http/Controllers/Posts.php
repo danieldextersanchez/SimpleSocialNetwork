@@ -65,6 +65,7 @@ users.username,
 users.image_url,
 posts.status as status,
 posts.created_at as created_at,
+NULL as post_created_at,
 posts.updated_at as updated_at,
 posts.user_id,
 posts.id,
@@ -80,9 +81,10 @@ SELECT users.firstname,
     users.username,
     users.image_url,
     posts.status,
-    posts.created_at as created_at,
+    share.created_at as created_at,
     posts.updated_at as updated_at,
     share.post_user_id as user_id,
+    posts.created_at as post_created_at,
     posts.id,
     share.message as message,
     share.user_id as share_user_id,
@@ -92,7 +94,7 @@ SELECT users.firstname,
     FROM `share` 
     INNER JOIN `posts` ON share.post_id = posts.id 
     INNER JOIN `users` ON users.id = share.user_id
-    INNER JOIN `users`  AS users2 ON users2.id = share.post_user_id
+    INNER JOIN `users`  AS users2 ON users2.id = share.post_user_id ORDER BY created_at DESC
         '));
         return view('layouts.posts')->with('posts',$users);
     }
@@ -114,7 +116,7 @@ SELECT users.firstname,
             'post_user_id' => $request->user_id,
             'post_id' => $request->post_id ,
             'message' => $request->message,
-            // 'created_at' => date('Y-m-d G:i:s')
+            'created_at' => date('Y-m-d G:i:s')
         ]);
         return response()->json([
             'message' => 'Successfully reshared'

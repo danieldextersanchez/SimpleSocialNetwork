@@ -19,6 +19,7 @@ class CreateTableShare extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('post_user_id');
             $table->unsignedInteger('post_id');
+            $table->dateTimeTz('created_at');
             $table->foreign('post_user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');

@@ -35,11 +35,8 @@
     </div>
     @else
     <div class='well postedpost pointer' style='background-color:#FFFFFF' >
-            <div class='floatright postactions' value='{{$id}}' style='display:none'>
-            <i data-1 ="{{$id}}"  data-2 ="{{$post_user_id}}" class='material-icons share pointer' >
-                reply
-                </i><br>
-                @if(Auth::id() == $post_user_id  )
+            <div class='floatright postactions' value='{{$id}}' style='display:none'>            
+                @if(Auth::id() == $newpost->share_user_id  )
                <i class="material-icons deletepost pointer" value='{{$id}}'>
                     delete_outline
                 </i>
@@ -52,7 +49,7 @@
                <div style='margin-left:20px'>{{$newpost->message}}</div><hr>
                <div style='min-height:50px'>
                <img height="50px" style='float:left;border-radius:50%;margin-right:10px' src="storage/profile_pictures/{{$newpost->image_url}}">
-               <b>{{$sharename}}</b> @ {{$shareusername}}  {{$date}}<br>
+               <b>{{$sharename}}</b> @ {{$shareusername}}  {{$newpost->post_created_at}}<br>
                {{$post}}
                </div>
                </div>
