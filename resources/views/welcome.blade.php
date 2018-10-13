@@ -1,73 +1,47 @@
 @extends('layouts.app')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @section('content')
-
-
 <div class="container content" >
-
 <h4 class='inline'>What's happening?</h4>
 <label id='charnum' class='floatright inline'>140</label>
-
-
 <textarea id='postinput' name="postinput" class='form-control' maxlength="140">
 </textarea>
 <br>
 <div style='min-height:50px;min-width:100px'>
 <button class='btn btn-default floatright' id='update' style='height:50px;width:100px'>Update</button> 
 </div>
-
 <h4 style='margin-top:50px'><b>Home</b></h4>
-
-
 @if(sizeof($posts) > 0)
 <div id='home'>
-  <?php
-   for($i=0;$i<sizeof($posts);$i++){
-    $name = $posts[$i]->name;   
-    $post = $posts[$i]->status;
+  @for($i=0;$i<sizeof($posts);$i++)
+    <?php 
+    $name = $posts[$i]->firstname." ". $posts[$i]->lastname  ;  
+    $post = $posts[$i]->status ;
     $id = $posts[$i]->id;
-    $username = $posts[$i]->username;
-    
+    $username = $posts[$i]->username; 
     $date =Carbon\Carbon::parse($posts[$i]->created_at)->diffForHumans();
-    echo "
-    
+    ?>
     <div class='well postedpost pointer' style='background-color:#FFFFFF' >
-
         <div class='floatright postactions' style='display:none'>
         <i value='$id' class='material-icons share' >
         reply
         </i>
        </div>
        
-       <div class='postcontent' >
-       <b>$name</b> ".'@'."$username . $date<br>
-       $post
+       <div class='postcontent' style='min-height:50px' >
+       <img height="50px" style='float:left;border-radius:50%;margin-right:10px' src="storage/profile_pictures/{{$posts[$i]->image_url}}">
+       <b>{{$name}}</b> @ {{$username}}  {{$date}}<br>
+       {{$post}}
        </div>
     </div>
-       ";
-   }
-
-  ?>
-    
+  @endfor
 </div>
 @else
 <div class='center' style='margin-top:100px'><h3>There are no posts</h3></div>
-
 @endif
-
-
 @yield('posts')
-
-
 </div>
 @stop
-
-
-
-
-
-
-
 
 <div id='spinkit' style='display:none'></div>
 <div id="myModal" class="modal fade" role="dialog">
@@ -77,9 +51,10 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title center">Retweet This?</h4>
-        </div>
-        <div class="modal-body" id='sharebody'>
-          <p>Some text in the modal.</p>
+        </div><br>
+        <textarea class='form-control center' style='width:90%;text-align:left' placeholder='Add a comment...'></textarea>
+        <div class="modal-body well center" style='width:100%;text-align:left;margin-top:20px'>
+          <div id='sharebody'></div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

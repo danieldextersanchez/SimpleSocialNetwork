@@ -30,9 +30,7 @@ Route::get('/views/spinkit', function(){
 });
 
 
-Route::get('/profile',function(){
-    return view('profile');
-})->name('profile');
+Route::get('/profile','UsersController@index')->name('profile');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
