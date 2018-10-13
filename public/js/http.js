@@ -34,8 +34,36 @@ var http  = {
           }
         })
       },
-      deletepost : function(){
-        alertify.success('deleted');
+      share : function(token,user_id,post_id,message){
+        console.log(user_id,post_id,message);
+        $.ajax({
+            url : "retweet",
+            type : "PUT",
+            data : {
+                post_id : post_id,
+                message : message,
+                user_id : user_id,
+                _token : token
+            },
+            success : function(data){
+                alertify.success("Retweeted");
+                http.loadpost(token);
+            }
+        })
+      },
+
+      deletepost : function(id,token){
+        $.ajax({
+            url : "deletepost",
+            type : "DELETE",
+            data :{ 
+                postid : id,
+                _token : token
+            }, success : function(){
+                alertify.success('Deleted');
+                http.loadpost(token);
+            }
+        })
       }
 }
 

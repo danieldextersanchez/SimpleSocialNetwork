@@ -1,3 +1,4 @@
+
 @if(sizeof($posts) > 0 )
 
 @for($i=0;$i<sizeof($posts);$i++)
@@ -7,16 +8,17 @@
     $post = $posts[$i]->status ;
     $id = $posts[$i]->id;
     $username = $posts[$i]->username; 
+    $post_user_id = $posts[$i]->user_id;
     $date =Carbon\Carbon::parse($posts[$i]->created_at)->diffForHumans();
     ?>
     <div class='well postedpost pointer' style='background-color:#FFFFFF' >
     <div class='floatright postactions' value='{{$id}}' style='display:none'>
-        <i value='$id' class='material-icons share' >
+    <i data-1 ="{{$id}}"  data-2 ="{{$post_user_id}}" class='material-icons share pointer' >
         reply
         </i><br>
-        @if(Auth::id() == $posts[$i]->user_id  )
-       <i class="material-icons deletepost" value='{{$id}}'>
-                delete_outline
+        @if(Auth::id() == $post_user_id  )
+       <i class="material-icons deletepost pointer" value='{{$id}}'>
+            delete_outline
         </i>
         @endif
        </div>

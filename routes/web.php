@@ -35,4 +35,5 @@ Route::get('/profile','UsersController@index')->name('profile');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/load/posts','Posts@posts');
-
+Route::delete('deletepost','Posts@delete');
+Route::put('retweet', 'Posts@retweet' );

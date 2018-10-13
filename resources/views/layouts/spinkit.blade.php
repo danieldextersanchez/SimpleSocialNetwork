@@ -1,4 +1,3 @@
-
 <div class="spinner" >
         <div class="rect1"></div>
         <div class="rect2"></div>

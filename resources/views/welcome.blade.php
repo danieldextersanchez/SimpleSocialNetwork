@@ -34,11 +34,12 @@
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title center">Retweet This?</h4>
         </div><br>
-        <textarea class='form-control center' style='width:90%;text-align:left' placeholder='Add a comment...'></textarea>
+        <textarea id='retwmessage' class='form-control center' style='width:90%;text-align:left' placeholder='Add a comment...'></textarea>
         <div class="modal-body well center" style='width:100%;text-align:left;margin-top:20px'>
           <div id='sharebody'></div>
         </div>
         <div class="modal-footer">
+          <button class='btn btn-default' id='retweet'>Retweet</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
@@ -88,18 +89,24 @@ $(document).on("click","#update",function(){
             $(this).css("background-color","#FFFFFF");
             $(this).children('.postactions').hide();
         })
-        
+        var tweetid;
+        var post_user_id;
         $(document).on("click",".share",function(){
-            var id = $(this).attr("value");
+            tweetid = $(this).attr("data-1");
+            post_user_id = $(this).attr("data-2")
             var content = $(this).parents('div.postedpost').children('.postcontent').html(); 
             $("#sharebody").html(content);  
             $("#myModal").modal();
+        })
+
+        $(document).on("click","#retweet",function(){
+          http.share("{{csrf_token()}}",post_user_id,tweetid,$("#retwmessage").val());
         })
         
         $(document).on("click",".deletepost",function(){
             var id = $(this).attr("value");
             alertify.confirm('Delete?',function(){
-                http.deletepost(id);
+                http.deletepost(id,"{{csrf_token()}}");
             },function(){
                 alertify.error("not deleted");
             });
