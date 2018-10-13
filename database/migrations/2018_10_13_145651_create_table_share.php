@@ -15,10 +15,13 @@ class CreateTableShare extends Migration
     {
         Schema::create('share',function(Blueprint $table){
             $table->increments('id');
+            $table->string('message');
             $table->unsignedInteger('user_id');
+            $table->unsignedInteger('post_user_id');
             $table->unsignedInteger('post_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('post_id')->references('id')->on('posts');
+            $table->foreign('post_user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 

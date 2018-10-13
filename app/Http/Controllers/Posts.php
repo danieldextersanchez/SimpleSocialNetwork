@@ -29,19 +29,63 @@ class Posts extends Controller
     }
 
     /*
-SELECT users.firstname,users.lastname,users.username,users.image_url, posts.*, NULL as message
+SELECT users.firstname,
+users.lastname,
+users.username,
+users.image_url,
+posts.status as status,
+posts.created_at as created_at,
+posts.updated_at as updated_at,
+posts.user_id,
+posts.id,
+NULL as message,
+NULL as share_user_id
 FROM `users` INNER JOIN `posts` ON users.id = posts.user_id 
 UNION ALL
-SELECT users.firstname,users.lastname,users.username,users.image_url, posts.*, share.message
-FROM `share` INNER JOIN `posts` ON share.user_id = posts.user_id 
-INNER JOIN `users` ON users.id = share.user_id 
+SELECT users.firstname,
+users.lastname,
+users.username,
+users.image_url,
+posts.status,
+posts.created_at as created_at,
+posts.updated_at as updated_at,
+share.post_user_id as user_id,
+posts.id,
+share.message as message,
+share.user_id as share_user_id
+FROM `share` INNER JOIN `posts` ON share.post_id = posts.id 
+INNER JOIN `users` ON users.id = share.user_id
     */
 
     public function posts(Request $request){
-        $users = DB::table('users')
-        ->join('posts', 'posts.user_id', '=', 'users.id')
-        ->select(DB::raw('users.firstname,users.lastname,users.username,users.image_url,posts.*')  )
-        ->orderBy('posts.created_at', 'desc')->get();
+        $users = DB::select(DB::raw('
+        SELECT users.firstname,
+users.lastname,
+users.username,
+users.image_url,
+posts.status as status,
+posts.created_at as created_at,
+posts.updated_at as updated_at,
+posts.user_id,
+posts.id,
+NULL as message,
+NULL as share_user_id
+FROM `users` INNER JOIN `posts` ON users.id = posts.user_id 
+UNION ALL
+SELECT users.firstname,
+users.lastname,
+users.username,
+users.image_url,
+posts.status,
+posts.created_at as created_at,
+posts.updated_at as updated_at,
+share.post_user_id as user_id,
+posts.id,
+share.message as message,
+share.user_id as share_user_id
+FROM `share` INNER JOIN `posts` ON share.post_id = posts.id 
+INNER JOIN `users` ON users.id = share.user_id
+        '));
         return view('layouts.posts')->with('posts',$users);
     }
 
@@ -59,10 +103,10 @@ INNER JOIN `users` ON users.id = share.user_id
     public function retweet(Request $request){
         DB::table('share')->insert([
             'user_id' => Auth::id(),
-            'posts_user_id' => $request->user_id,
+            'post_user_id' => $request->user_id,
             'post_id' => $request->post_id ,
             'message' => $request->message,
-            'created_at' => date('Y-m-d G:i:s')
+            // 'created_at' => date('Y-m-d G:i:s')
         ]);
         return response()->json([
             'message' => 'Successfully reshared'
