@@ -100,6 +100,7 @@ $(document).on("click","#update",function(){
         })
 
         $(document).on("click","#retweet",function(){
+          alert(post_user_id);
           http.share("{{csrf_token()}}",post_user_id,tweetid,$("#retwmessage").val());
         })
         
