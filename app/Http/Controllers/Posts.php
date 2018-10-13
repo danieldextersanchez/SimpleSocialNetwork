@@ -27,4 +27,10 @@ class Posts extends Controller
         return view('welcome')->with('posts',$users);
     }
 
+    public function posts(Request $request){
+        $users = DB::table('users')->join('posts', 'posts.user_id', '=', 'users.id')
+        ->select('users.firstname','users.lastname','users.username','users.image_url','posts.*')->orderBy('posts.created_at', 'desc')->get();
+        return view('layouts.posts')->with('posts',$users);
+    }
+
 }
