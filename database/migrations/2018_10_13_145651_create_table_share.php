@@ -15,7 +15,7 @@ class CreateTableShare extends Migration
     {
         Schema::create('share',function(Blueprint $table){
             $table->increments('id');
-            $table->string('message');
+            $table->string('message')->nullable();
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('post_user_id');
             $table->unsignedInteger('post_id');

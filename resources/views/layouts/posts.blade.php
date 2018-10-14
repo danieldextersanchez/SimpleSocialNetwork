@@ -30,14 +30,16 @@
        <div class='postcontent' style='min-height:50px' >
        <img height="50px" style='float:left;border-radius:50%;margin-right:10px' src="storage/profile_pictures/{{$newpost->image_url}}">
        <b>{{$name}}</b> @ {{$username}}  {{$date}}<br>
-       {{$post}}
+       <div style='display:inline-block;'>
+        <p style='word-break: break-all; '><?php echo nl2br($post); ?></p>
+       </div>
        </div>
     </div>
     @else
     <div class='well postedpost pointer' style='background-color:#FFFFFF' >
             <div class='floatright postactions' value='{{$id}}' style='display:none'>            
                 @if(Auth::id() == $newpost->share_user_id  )
-               <i class="material-icons deletepost pointer" value='{{$id}}'>
+               <i class="material-icons deleteshare pointer" value='{{$newpost->share_id}}'>
                     delete_outline
                 </i>
                 @endif

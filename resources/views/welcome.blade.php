@@ -2,7 +2,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src='{{asset('js/http.js')}}'></script>
 
-
 @extends('layouts.app')
 @section('content')
 <div class="container content" >
@@ -100,7 +99,6 @@ $(document).on("click","#update",function(){
         })
 
         $(document).on("click","#retweet",function(){
-          alert(post_user_id);
           http.share("{{csrf_token()}}",post_user_id,tweetid,$("#retwmessage").val());
         })
         
@@ -108,6 +106,15 @@ $(document).on("click","#update",function(){
             var id = $(this).attr("value");
             alertify.confirm('Delete?',function(){
                 http.deletepost(id,"{{csrf_token()}}");
+            },function(){
+                alertify.error("not deleted");
+            });
+        })
+
+        $(document).on("click",".deleteshare",function(){
+            var id = $(this).attr("value");
+            alertify.confirm('Delete?',function(){
+                http.deleteshare(id,"{{csrf_token()}}");
             },function(){
                 alertify.error("not deleted");
             });

@@ -73,13 +73,14 @@ NULL as message,
 NULL as share_user_id,
 NULL as sharefirst,
 NULL as sharelast,
-NULL as shareuse
+NULL as shareuse,
+NULL as share_id
 FROM `users` INNER JOIN `posts` ON users.id = posts.user_id 
 UNION ALL
 SELECT users.firstname,
     users.lastname,
     users.username,
-    users.image_url,
+    users2.image_url,
     posts.status,
     share.created_at as created_at,
     posts.updated_at as updated_at,
@@ -90,7 +91,8 @@ SELECT users.firstname,
     share.user_id as share_user_id,
     users2.firstname as sharefirst,
     users2.lastname as sharelast,
-    users2.username as shareuse
+    users2.username as shareuse,
+    share.id as share_id
     FROM `share` 
     INNER JOIN `posts` ON share.post_id = posts.id 
     INNER JOIN `users` ON users.id = share.user_id
@@ -110,6 +112,19 @@ SELECT users.firstname,
             return $request->postid;
         }
     }
+
+    public function deleteshare(Request $request){
+        $userid =  DB::table('share')->select('user_id')->where('id',$request->postid)->get()[0]->user_id;
+        if(Auth::id() !=  $userid){
+            return response()->json([
+                'message' => 'Unauthorized',
+            ], 401);
+        }else{
+            DB::table('share')->where('id',$request->postid)->delete();
+            return $request->postid;
+        }
+    }
+
     public function retweet(Request $request){
         DB::table('share')->insert([
             'user_id' => Auth::id(),

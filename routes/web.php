@@ -36,4 +36,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/load/posts','Posts@posts');
 Route::delete('deletepost','Posts@delete');
+Route::delete('deleteshare','Posts@deleteshare');
 Route::put('retweet', 'Posts@retweet' );
+Route::post('updateimage','UsersController@updateprofile');

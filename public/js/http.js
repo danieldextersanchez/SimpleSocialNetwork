@@ -64,7 +64,23 @@ var http  = {
                 http.loadpost(token);
             }
         })
-      }
+      },
+
+      deleteshare : function(id,token){
+        $.ajax({
+            url : "deleteshare",
+            type : "DELETE",
+            data :{ 
+                postid : id,
+                _token : token
+            }, success : function(){
+                alertify.success('Deleted');
+                http.loadpost(token);
+            }
+        })
+      },
+
+      
 }
 
 
